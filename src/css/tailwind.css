@@ -1,0 +1,27 @@
+@source "../sections/**/*.liquid";
+@source "../templates/**/*.liquid";
+@source "../snippets/**/*.liquid";
+@source "../layout/**/*.liquid";
+@source "../assets/*.js";
+
+/* Tailwind v4 导入语法，v3 @tailwind 语法已废弃 */
+@import 'tailwindcss' prefix(tw);
+@import 'tailwindcss' prefix(tw);
+
+/* 【强烈建议】加前缀，避免和Dawn原生样式类名冲突！ */
+/* 所有class必须写 tw:flex tw:p-4，不会覆盖原有.flex */
+/* @import "tailwindcss" prefix(tw-); */
+
+/* 自定义主题（v4专属@theme，替代tailwind.config.js） */
+@theme {
+  --color-shop-primary: #008060;
+  --breakpoint-md: 750px; /* 对齐Dawn断点 */
+  --spacing-18: 4.5rem;
+}
+
+/* 自定义组件 */
+@layer components {
+  .btn-shop {
+    @apply tw:bg-[var(--color-shop-primary)] tw:text-white tw:px-6 tw:py-3 tw:rounded-lg;
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "shop-demo01",
+  "version": "1.0.0",
+  "description": "[![Build status](https://github.com/shopify/dawn/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Shopify/dawn/actions/workflows/ci.yml?query=branch%3Amain)\r [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?color=informational)](/.github/CONTRIBUTING.md)",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently -k -p \"[{name}]\" -n \"TAILWATCH,SHOPIFY\" -c \"cyan,green\" \"npm run dev:vite\" \"npm run dev:shopify\"",
+    "dev:vite": "vite build --watch",
+    "dev:shopify": "shopify theme dev",
+    "build": "vite build",
+    "push": "shopify theme push",
+    "pull": "shopify theme pull"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^4.3.0",
+    "@tailwindcss/vite": "^4.3.0",
+    "concurrently": "^9.1.2",
+    "vite": "^8.0.0"
+  }
+}
