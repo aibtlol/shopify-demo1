@@ -13,10 +13,19 @@ This is a technical demo for Shopify Online Store 2.0 theme development, showing
 
 
 ## Implemented Features
-<!-- 1. 自定义区块A
+<!-- 
+1. 自定义区块A
 2. 弹窗/变体筛选交互
 3. 移动端自适应布局
-4. CSS打包自动化构建脚本 -->
+4. CSS打包自动化构建脚本 
+# 打包编译、压缩、图片优化
+npm run build
 
+# 复制产物到 Shopify 资源目录
+npm run copy
+
+# 推送到店铺
+shopify theme push
+-->
 ## License
 MIT License, for learning & reference only. Do NOT copy this code for commercial outsourcing & reselling services.
