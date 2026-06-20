@@ -3,15 +3,16 @@
   "version": "1.0.0",
   "description": "[![Build status](https://github.com/shopify/dawn/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Shopify/dawn/actions/workflows/ci.yml?query=branch%3Amain)\r [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?color=informational)](/.github/CONTRIBUTING.md)",
   "main": "index.js",
-  "type": "module", 
+  "type": "module",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development concurrently -k -p \"[{name}]\" -n \"TAILWATCH,SHOPIFY\" -c \"cyan,green\" \"npm run dev:vite\" \"npm run dev:shopify\"",
+    "dev": "cross-env NODE_ENV=development concurrently -k -p \"[{name}]\" -n \"VITE,SHOPIFY\" -c \"cyan,green\" \"npm run dev:vite\" \"npm run dev:shopify\"",
     "dev:vite": "vite build --watch",
     "dev:shopify": "shopify theme dev",
     "build": "cross-env NODE_ENV=production vite build",
     "push": "shopify theme push",
     "pull": "shopify theme pull",
-    "copy": "cp -r dist/* ./assets/"
+    "copy": "cp -r dist/* ./assets/", 
+    "a11y-scan": "lighthouse http://127.0.0.1:9292 --view --output html --output-path ./accessibility-report.html --only-categories=accessibility"
   },
   "keywords": [],
   "author": "",

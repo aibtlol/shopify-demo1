@@ -35,13 +35,12 @@
     <script src="{{ 'details-modal.js' | asset_url }}" defer="defer"></script>
     <script src="{{ 'search-form.js' | asset_url }}" defer="defer"></script>
 
-    {% comment %} main {% endcomment %}
+    <script src="{{ 'alpine.min.js' | asset_url }}" defer="defer"></script>
     {% if mode == 'development' %}
       <link rel="stylesheet" href="http://localhost:5173/src/css/main.css">
-      <script src="http://localhost:5173/src/js/main.js" type="module"></script>
     {% else %}
       {{ 'theme.min.css' | asset_url | stylesheet_tag }}
-      <script src="{{ 'app.min.js' | asset_url }}" defer></script>
+    {% endif %}
 
     {%- if settings.animations_reveal_on_scroll -%}
       <script src="{{ 'animations.js' | asset_url }}" defer="defer"></script>
@@ -310,7 +309,6 @@
     <a class="skip-to-content-link button visually-hidden" href="#MainContent">
       {{ 'accessibility.skip_to_text' | t }}
     </a>
-
     {%- if settings.cart_type == 'drawer' -%}
       {%- render 'cart-drawer' -%}
     {%- endif -%}

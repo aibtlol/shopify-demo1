@@ -12,3 +12,4 @@ node_modules
 .vscode
 .github
 .git
+axe-linter.yml
