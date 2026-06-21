@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>移动端汉堡菜单完整演示</title>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f5f5f7;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* ========== 头部导航 ========== */
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 600;
+      color: #1d1d1f;
+    }
+
+    /* 汉堡按钮 - 默认显示，方便直接测试效果 */
+    .hamburger-btn {
+      background: transparent;
+      border: 1px solid #e5e5e7;
+      border-radius: 6px;
+      font-size: 22px;
+      cursor: pointer;
+      padding: 6px 12px;
+      color: #1d1d1f;
+      transition: background 0.2s;
+    }
+    .hamburger-btn:hover {
+      background: #f5f5f7;
+    }
+
+    /* ========== 遮罩层 ========== */
+    .mobile-nav-mask {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 9999;
+      display: flex;
+      /* 过渡动画初始状态 */
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    .mobile-nav-mask.is-open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    /* ========== 右侧抽屉 ========== */
+    .mobile-nav-drawer {
+      margin-left: auto;
+      width: min(82vw, 320px);
+      background: #fff;
+      height: 100vh;
+      padding: 24px;
+      overflow-y: auto;
+      /* 抽屉滑入动画 */
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .mobile-nav-mask.is-open .mobile-nav-drawer {
+      transform: translateX(0);
+    }
+
+    /* 关闭按钮 */
+    .close-btn {
+      display: block;
+      margin-left: auto;
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: #86868b;
+      padding: 4px 8px;
+    }
+    .close-btn:hover {
+      color: #1d1d1f;
+    }
+
+    /* 导航列表 */
+    .mobile-nav-drawer nav {
+      margin-top: 24px;
+    }
+    .mobile-nav-drawer ul {
+      list-style: none;
+    }
+    .mobile-nav-drawer li {
+      border-bottom: 1px solid #f2f2f7;
+    }
+    .mobile-nav-drawer a {
+      display: block;
+      padding: 16px 4px;
+      font-size: 17px;
+      color: #1d1d1f;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .mobile-nav-drawer a:hover {
+      color: #0071e3;
+    }
+
+    /* 页面内容区 */
+    .demo-content {
+      margin-top: 40px;
+      padding: 30px;
+      background: #fff;
+      border-radius: 8px;
+      line-height: 1.8;
+      color: #424245;
+    }
+    .demo-content h1 {
+      font-size: 24px;
+      margin-bottom: 16px;
+      color: #1d1d1f;
+    }
+    .demo-content p {
+      margin-bottom: 12px;
+    }
+
+    /* 提示条 */
+    .tip {
+      margin-top: 20px;
+      padding: 12px 16px;
+      background: #e8f0fe;
+      border-radius: 6px;
+      color: #1d69d4;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body x-data>
+
+  <!-- 页面头部 -->
+  <header>
+    <div class="logo">Shopify Demo</div>
+    <!-- 汉堡触发按钮 -->
+    <button
+      class="hamburger-btn"
+      @click="$store.mobileMenu.toggle()"
+      aria-label="打开导航菜单"
+      :aria-expanded="$store.mobileMenu.open"
+    >
+      <span x-show="!$store.mobileMenu.open" x-cloak>☰</span>
+      <span x-show="$store.mobileMenu.open" x-cloak>✕</span>
+    </button>
+  </header>
+
+  <!-- 演示内容 -->
+  <div class="demo-content">
+    <h1>移动端抽屉菜单演示</h1>
+    <p>点击右上角的 ☰ 按钮，即可打开侧边抽屉菜单。</p>
+    <p>支持以下交互：</p>
+    <p>• 点击汉堡按钮开关菜单<br>
+       • 点击黑色遮罩区域关闭菜单<br>
+       • 按键盘 ESC 键关闭菜单<br>
+       • 打开菜单时页面禁止滚动<br>
+       • 抽屉带有平滑滑入/滑出动画</p>
+  </div>
+
+  <div class="tip">💡 提示：本页面按钮默认显示，方便直接测试。移植到 Shopify 主题时可通过媒体查询在大屏隐藏。</div>
+
+  <!-- 遮罩 + 抽屉 -->
+  <div
+    class="mobile-nav-mask"
+    :class="{ 'is-open': $store.mobileMenu.open }"
+    @click="$store.mobileMenu.closeMenu()"
+    aria-hidden="true"
+  >
+    <div class="mobile-nav-drawer" @click.stop>
+      <button class="close-btn" @click="$store.mobileMenu.closeMenu()" aria-label="关闭菜单">✕</button>
+      <nav>
+        <ul>
+          <li><a href="#" @click.prevent="$store.mobileMenu.closeMenu()">首页</a></li>
+          <li><a href="#" @click.prevent="$store.mobileMenu.closeMenu()">全部商品</a></li>
+          <li><a href="#" @click.prevent="$store.mobileMenu.closeMenu()">新品上架</a></li>
+          <li><a href="#" @click.prevent="$store.mobileMenu.closeMenu()">热卖推荐</a></li>
+          <li><a href="#" @click.prevent="$store.mobileMenu.closeMenu()">关于我们</a></li>
+          <li><a href="#" @click.prevent="$store.mobileMenu.closeMenu()">联系客服</a></li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('alpine:init', () => {
+      Alpine.store('mobileMenu', {
+        open: false,
+
+        openMenu() {
+          this.open = true;
+          document.body.style.overflow = 'hidden';
+        },
+
+        closeMenu() {
+          this.open = false;
+          document.body.style.overflow = '';
+        },
+
+        toggle() {
+          this.open ? this.closeMenu() : this.openMenu();
+        }
+      });
+    });
+
+    // ESC 关闭
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const store = Alpine.store('mobileMenu');
+        if (store && store.open) store.closeMenu();
+      }
+    });
+
+    // 大屏自动关闭
+    window.addEventListener('resize', () => {
+      const store = Alpine.store('mobileMenu');
+      if (store && window.innerWidth > 749) store.closeMenu();
+    });
+  </script>
+</body>
+</html>
