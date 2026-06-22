@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "cross-env NODE_ENV=development concurrently -k -p \"[{name}]\" -n \"VITE,SHOPIFY\" -c \"cyan,green\" \"npm run dev:vite\" \"npm run dev:shopify\"",
-    "dev:vite": "vite build --watch",
+    "dev:vite": "vite",
     "dev:shopify": "shopify theme dev",
     "build": "cross-env NODE_ENV=production vite build",
     "push": "shopify theme push",

@@ -312,18 +312,20 @@
     class="mobile-nav-mask"
     x-show="$store.mobileMenu.open"
     :class="{ 'mobile-nav-mask-show': $store.mobileMenu.open }"
-    x-transition.opacity
+    x-transition.translate
     @click="$store.mobileMenu.closeMenu()"
   >
     <div class="mobile-nav-drawer" @click.stop x-data>
-      <button @click="$store.mobileMenu.closeMenu()" style="margin-left:auto;">Close</button>
+      <button @click="$store.mobileMenu.closeMenu()" class="tw:text-3xl tw:font-semibold" style="margin-left:auto;">
+        ✕
+      </button>
       <nav>
-        <ul>
+        <ul role="listbox">
           {% liquid
             assign link_list = section.settings.menu
           %}
           {% for item in link_list.links %}
-            <li>
+            <li class="tw:border-b-1 tw:border-[#eeeeee]">
               <a href="{{ item.url }}" @click="$store.mobileMenu.closeMenu()">{{ item.title }}</a>
             </li>
           {% endfor %}

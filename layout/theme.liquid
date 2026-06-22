@@ -36,7 +36,8 @@
     <script src="{{ 'search-form.js' | asset_url }}" defer="defer"></script>
 
     <script src="{{ 'alpine.min.js' | asset_url }}" defer="defer"></script>
-    {% if mode == 'development' %}
+    {% assign is_dev = request.host contains '127.0.0.1' or request.host contains 'localhost' %}
+    {% if is_dev %}
       <link rel="stylesheet" href="http://localhost:5173/src/css/main.css">
     {% else %}
       {{ 'theme.min.css' | asset_url | stylesheet_tag }}
