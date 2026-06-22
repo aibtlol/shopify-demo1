@@ -1,0 +1,216 @@
+{% assign popup_img = shop.metafields.custom.subscribe_popup_img %}
+
+<div
+  x-data="
+    {
+      popupOpen: false,
+      popupShowed: localStorage.getItem('subscribePopupShowed') === 'true',
+      init() {
+        // 10秒后自动弹窗，当天只弹一次
+        if(!this.popupShowed) {
+          setTimeout(() => {
+            this.popupOpen = true;
+            localStorage.setItem('subscribePopupShowed', 'true');
+          }, 10000)
+        }
+        // ESC关闭弹窗
+        window.addEventListener('keydown', (e) => {
+          if(e.key === 'Escape') this.popupOpen = false
+        })
+      }
+    }
+  "
+  x-bind:class="{ 'tw:overflow-hidden': popupOpen }"
+>
+  <button
+    class="tw:fixed tw:right-5 tw:bottom-5 tw:w-[52px] tw:h-[52px] tw:rounded-full tw:border-none tw:bg-black tw:text-white tw:z-[998] tw:cursor-pointer tw:flex tw:items-center tw:justify-center tw:shadow-lg tw:transition-transform tw:duration-200 tw:ease-out tw:hover:-translate-y-1"
+    @click="popupOpen = true"
+    aria-label="Open email subscribe popup"
+  >
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+      <polyline points="22,6 12,13 2,6"></polyline>
+    </svg>
+  </button>
+
+  <div
+    x-show="popupOpen"
+    x-transition.opacity.duration.300ms
+    class="tw:fixed tw:inset-0 tw:bg-[rgba(0,0,0,0.6)] tw:z-999"
+    :style="{display: popupOpen ? 'block' : 'none'}"
+    @click="popupOpen = false"
+  ></div>
+
+  <div
+    role="dialog"
+    x-show="popupOpen"
+    x-transition:enter="transition ease-out duration-300 origin-center"
+    x-transition:enter-start="opacity-0 scale-90"
+    x-transition:enter-end="opacity-100 scale-100"
+    x-transition:leave="transition ease-in duration-300 origin-center"
+    x-transition:leave-start="opacity-100 scale-100"
+    x-transition:leave-end="opacity-0 scale-90"
+    class="subscribe-modal will-change-transform"
+    @click.stop
+  >
+    <button class="modal-close" @click="popupOpen = false">×</button>
+
+    <div class="modal-grid">
+      {% if popup_img %}
+        <div class="modal-img">
+          <img
+            src="{{ popup_img | image_url: width: 450 }}"
+            alt="Trendy Tees & Sweatshirts"
+            loading="lazy"
+          >
+        </div>
+      {% endif %}
+
+      <div class="modal-form" role="form">
+        <h2 class="modal-title">15% OFF Your First Tee & Hoodie</h2>
+        <p class="modal-desc">
+          Sign up for exclusive restock alerts, limited graphic sweatshirts & member-only discounts.
+        </p>
+
+        {% form 'customer', class: 'subscribe-form' %}
+          <input
+            type="hidden"
+            name="contact[tags]"
+            value="newsletter,clothing-subscriber"
+          >
+          <div class="field">
+            <input
+              type="email"
+              name="contact[email]"
+              placeholder="Enter your email address"
+              required
+              class="field-input"
+            >
+          </div>
+          {%- if form.errors -%}
+            <small class="newsletter-form__message form__message" id="ContactFooter-error">
+              <span class="svg-wrapper">
+                {{- 'icon-error.svg' | inline_asset_content -}}
+              </span>
+              {{- form.errors.translated_fields.email | capitalize }}
+              {{ form.errors.messages.email -}}
+            </small>
+          {%- endif -%}
+          {%- if form.posted_successfully? -%}
+            <h3
+              class="newsletter-form__message newsletter-form__message--success form__message"
+              id="ContactFooter-success"
+              tabindex="-1"
+              autofocus
+            >
+              <span class="svg-wrapper">
+                {{- 'icon-success.svg' | inline_asset_content -}}
+              </span>
+              {{- 'newsletter.success' | t }}
+            </h3>
+          {%- endif -%}
+          <button type="submit" class="submit-btn tw:mt-5">Claim My Discount</button>
+          <small class="modal-tiny">We respect your privacy. Unsubscribe anytime.</small>
+        {% endform %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* 弹窗容器 */
+  .subscribe-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(92%, 520px);
+    background: #fff;
+    border-radius: 12px;
+    z-index: 1000;
+    overflow: hidden;
+  }
+  .modal-close {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    border: none;
+    background: transparent;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 2;
+    padding: 4px 8px;
+  }
+
+  /* 弹窗布局 桌面左右分栏，移动端上下堆叠 */
+  .modal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .modal-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .modal-form {
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .modal-title {
+    font-size: 22px;
+    margin: 0;
+    line-height: 1.2;
+  }
+  .modal-desc {
+    color: #555;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .field-input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+  .submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: #000;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  .submit-btn:hover {
+    background: #333;
+  }
+  .modal-tiny {
+    font-size: 11px;
+    color: #888;
+    margin: 0;
+    text-align: center;
+  }
+
+  /* 移动端适配 */
+  @media screen and (max-width: 749px) {
+    .modal-grid {
+      grid-template-columns: 1fr;
+    }
+    .modal-img {
+      max-height: 220px;
+    }
+    .subscribe-float-btn {
+      width: 46px;
+      height: 46px;
+      right: 16px;
+      bottom: 16px;
+    }
+  }
+</style>
