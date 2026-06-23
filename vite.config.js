@@ -20,7 +20,7 @@ export default defineConfig({
     rollupOptions: {
       input: './src/css/tailwind.css',
       output: {
-        assetFileNames: 'tailwind.min.css',
+        assetFileNames: 'theme.min.css',
       },
     },
   },
