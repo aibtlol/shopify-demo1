@@ -13,3 +13,4 @@ node_modules
 .github
 .git
 axe-linter.yml
+# snippets/is-dev.liquid

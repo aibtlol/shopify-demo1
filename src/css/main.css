@@ -1,8 +1,0 @@
-@source "../sections/**/*.liquid";
-@source "../templates/**/*.liquid";
-@source "../snippets/**/*.liquid";
-@source "../layout/**/*.liquid";
-@source "../assets/*.js";
-
-/* Tailwind v4 导入语法，v3 @tailwind 语法已废弃 */
-@import 'tailwindcss' prefix(tw);

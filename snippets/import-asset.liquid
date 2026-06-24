@@ -1,0 +1,38 @@
+{% capture dev_flag %}
+  {% render 'is-dev' %}
+{% endcapture %}
+
+{% liquid
+  assign is_local_dev = false
+  assign dev_flag = dev_flag | strip
+  if dev_flag == 'true'
+    assign is_local_dev = true
+  endif
+%}
+
+{% comment %} 1. 自动提取文件名与后缀 {% endcomment %}
+{% assign src_arr = src | split: '/' %}
+{% assign file_name_full = src_arr | last %}
+{% assign file_parts = file_name_full | split: '.' %}
+{% assign file_name = file_parts[0] %}
+{% assign ext = file_parts[1] %}
+
+{% comment %} 2. 自动生成dist文件名：无dist参数时使用 xx.min.后缀 {% endcomment %}
+{% if dist == blank %}
+  {% assign dist = file_name | append: '.min.' | append: ext %}
+{% endif %}
+
+{% comment %} 3. 资源渲染逻辑 {% endcomment %}
+{% if ext == 'js' %}
+  {% if is_local_dev %}
+    <script type="module" src="http://127.0.0.1:3000/{{ src }}"></script>
+  {% else %}
+    <script src="{{ dist | asset_url }}" defer="defer"></script>
+  {% endif %}
+{% elsif ext == 'css' %}
+  {% if is_local_dev %}
+    <link rel="stylesheet" href="http://127.0.0.1:3000/{{ src }}">
+  {% else %}
+    {{ dist | asset_url | stylesheet_tag }}
+  {% endif %}
+{% endif %}
