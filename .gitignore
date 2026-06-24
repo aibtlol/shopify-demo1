@@ -14,3 +14,4 @@ node_modules
 .git
 axe-linter.yml
 # snippets/is-dev.liquid
+public/

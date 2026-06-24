@@ -1,0 +1,107 @@
+{% comment %}
+  【Shopify 终极通用高性能图片组件】
+  适配Lighthouse跑分、响应式、CDN自动avif/webp、无障碍、分层加载
+  参数说明：
+  src        必填，assets内图片文件名，如 banner.png
+  alt        图片描述，默认兜底 Product image
+  width      图片原生像素宽（防CLS必填）
+  height     图片原生像素高（防CLS必填）
+  is_lcp     布尔 true=首屏LCP主图，false=普通图片
+  img_class  img标签默认类名 w-full h-auto object-cover，外部可覆盖
+  img_id     可选DOM id
+  srcset     多分辨率图片字符串 例: "img-400.png 400w, img-800.png 800w"
+  sizes      配合srcset尺寸规则 例: "(max-width:768px) 100vw, 50vw"
+  usage:
+  {% render 'picture-img',
+    src: 'products/shirt-01.png',
+    alt: 'Men cotton t-shirt',
+    width: 800,
+    height: 800,
+    srcset: '{{ "products/shirt-01-400.png" | asset_url }} 400w, {{ "products/shirt-01-800.png" | asset_url }} 800w'
+  %}
+
+  {% render 'picture-img',
+    src: 'products/shirt-01.png',
+    alt: 'Men cotton t-shirt',
+    width: 800,
+    height: 800,
+    srcset: '{{ "products/shirt-01-400.png" | asset_url }} 400w, {{ "products/shirt-01-800.png" | asset_url }} 800w'
+  %}
+{% endcomment %}
+
+{% assign img_src = src | strip | default: blank %}
+{% assign alt_text = alt | default: 'Product image' | escape %}
+{% assign native_w = width | strip | default: 1 %}
+{% assign native_h = height | strip | default: 1 %}
+{% assign img_id = img_id | strip | default: blank %}
+{% assign img_custom_class = img_class | default: 'w-full h-auto object-cover' %}
+{% assign is_lcp_flag = is_lcp | default: false %}
+{% assign srcset_str = srcset | strip | default: blank %}
+{% assign sizes_str = sizes | strip | default: blank %}
+
+{% if img_src != blank %}
+  {% assign base_url = img_src | asset_url %}
+  <picture>
+    {% if srcset_str != blank %}
+      {# 多尺寸响应式分支，规范拼接avif/webp srcset #}
+      <source
+        srcset="{{ base_url }}&format=avif, {{ srcset_str | split: ', ' | map: 'append: "&format=avif"' | join: ', ' }}"
+        {% if sizes_str != blank %}
+          sizes="{{ sizes_str }}"
+        {% endif %}
+        type="image/avif"
+      >
+      <source
+        srcset="{{ base_url }}&format=webp, {{ srcset_str | split: ', ' | map: 'append: "&format=webp"' | join: ', ' }}"
+        {% if sizes_str != blank %}
+          sizes="{{ sizes_str }}"
+        {% endif %}
+        type="image/webp"
+      >
+      <img
+        src="{{ base_url }}"
+        srcset="{{ srcset_str }}"
+        {% if sizes_str != blank %}
+          sizes="{{ sizes_str }}"
+        {% endif %}
+        alt="{{ alt_text }}"
+        width="{{ native_w }}"
+        height="{{ native_h }}"
+        class="{{ img_custom_class }}"
+        {% if img_id != blank %}
+          id="{{ img_id }}"
+        {% endif %}
+        {% if is_lcp_flag %}
+          loading="eager"
+          fetchpriority="high"
+        {% else %}
+          loading="lazy"
+          fetchpriority="low"
+          decoding="async"
+        {% endif %}
+      >
+    {% else %}
+      {# 单尺寸普通图片分支 #}
+      <source srcset="{{ base_url }}&format=avif" type="image/avif">
+      <source srcset="{{ base_url }}&format=webp" type="image/webp">
+      <img
+        src="{{ base_url }}"
+        alt="{{ alt_text }}"
+        width="{{ native_w }}"
+        height="{{ native_h }}"
+        class="{{ img_custom_class }}"
+        {% if img_id != blank %}
+          id="{{ img_id }}"
+        {% endif %}
+        {% if is_lcp_flag %}
+          loading="eager"
+          fetchpriority="high"
+        {% else %}
+          loading="lazy"
+          fetchpriority="low"
+          decoding="async"
+        {% endif %}
+      >
+    {% endif %}
+  </picture>
+{% endif %}
