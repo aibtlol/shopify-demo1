@@ -7,3 +7,4 @@ vite.config.js
 .gitignore
 snippets/is-dev.liquid
 public
+*.zip

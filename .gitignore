@@ -15,3 +15,4 @@ node_modules
 axe-linter.yml
 # snippets/is-dev.liquid
 public/
+*.zip
