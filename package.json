@@ -11,8 +11,6 @@
     "build": "vite build",
     "push": "npm run build && npm run pull &&  shopify theme push",
     "pull": "shopify theme pull",
-    "zip:deploy": "sh ./package.sh deploy",
-    "zip:source": "sh ./package.sh source",
     "a11y-scan": "lighthouse http://127.0.0.1:9292 --view --output html --output-path ./accessibility-report.html --only-categories=accessibility"
   },
   "keywords": [],
