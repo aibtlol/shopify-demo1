@@ -10,3 +10,4 @@ public
 *.zip
 assets/theme-devtools.js
 snippets/theme-devtools-bridge.liquid
+package.sh
