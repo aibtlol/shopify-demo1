@@ -8,3 +8,5 @@ vite.config.js
 snippets/is-dev.liquid
 public
 *.zip
+assets/theme-devtools.js
+snippets/theme-devtools-bridge.liquid
