@@ -13,9 +13,10 @@ node_modules
 .github
 .git
 axe-linter.yml
-# snippets/is-dev.liquid
 public/
 *.zip
 assets/theme-devtools.js
 snippets/theme-devtools-bridge.liquid
 package.sh
+.cursorignore
+.cursor

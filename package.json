@@ -1,8 +1,7 @@
 {
   "name": "shop-demo01",
   "version": "1.0.0",
-  "description": "[![Build status](https://github.com/shopify/dawn/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Shopify/dawn/actions/workflows/ci.yml?query=branch%3Amain)\r [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?color=informational)](/.github/CONTRIBUTING.md)",
-  "main": "index.js",
+  "description": "",
   "type": "module",
   "scripts": {
     "dev": "concurrently -k -p \"[{name}]\" -n \"VITE,SHOPIFY\" -c \"cyan,green\" \"npm run dev:vite\" \"npm run dev:shopify\"",
@@ -11,9 +10,10 @@
     "build": "vite build"
   },
   "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "author": "aaibotian@gmail.com",
+  "license": "Custom-LearnOnly-NoCommercialOutsource",
   "devDependencies": {
+    "@shopify/prettier-plugin-liquid": "^1.10.3",
     "@tailwindcss/vite": "^4.3.0",
     "concurrently": "^9.1.2",
     "glob": "^13.0.6",
